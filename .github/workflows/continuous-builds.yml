@@ -58,6 +58,9 @@ jobs:
           git fetch --prune --unshallow
           sudo python3.11 -m pip install .
 
+      - uses: mxschmitt/action-tmate@master
+        name: Setup tmate session
+
       - name: Show version
         run: |
           appimage-builder --version
