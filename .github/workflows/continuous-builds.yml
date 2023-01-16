@@ -15,10 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     container: ubuntu:22.04
     steps:
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
       - name: Install dependencies
         run: |
-          apt-get update 
-          apt-get install -y python3.11 python3-pip python3-pytest fakeroot binutils patchelf git
+          python3.11 -m pip install pytest
+          apt-get update
+          apt-get install -y fakeroot binutils patchelf git
       - uses: actions/checkout@v3
       - name: Install appimage-builder
         run: |
@@ -32,8 +37,14 @@ jobs:
     runs-on: ubuntu-latest
     container: archlinux
     steps:
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
       - name: Install dependencies
-        run: pacman -Syu --noconfirm python-pip python-pytest python-setuptools binutils patchelf fakeroot strace patchelf git
+        run: |
+          python3.11 -m pip install pytest
+          pacman -Syu --noconfirm binutils patchelf fakeroot strace patchelf git
       - uses: actions/checkout@v3
       - name: Install appimage-builder
         run: |
@@ -47,9 +58,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ pytest-ubuntu-focal, pytest-archlinux ]
     steps:
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
       - name: Install dependencies
         run: |
-          sudo apt install -y python3.11-minimal python3-pip python3-setuptools patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot strace git
+          python3.11 -m pip install pytest
+          sudo apt install -y patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot strace git
           sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
           sudo chmod +x /usr/local/bin/appimagetool
       - uses: actions/checkout@v3
